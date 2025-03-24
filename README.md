@@ -57,8 +57,8 @@ crypto_price_predictor/
 
 1. Clone the repository:
    ```
-   git clone <repository-url>
-   cd cryptocurrency-price-prediction
+   git clone https://github.com/0xlimon/crypto-price-predictor.git
+   cd ccrypto-price-predictor
    ```
 
 2. Install required packages:
