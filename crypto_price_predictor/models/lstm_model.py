@@ -278,18 +278,40 @@ class LSTMModel:
                 "Please provide pre-processed sequence data."
             )
         
+        # Make a deep copy of the input sequence
         sequence = recent_data.copy()
+        
+        # Ensure sequence has the correct shape for LSTM input
+        # For LSTM, we need shape (samples, time steps, features)
+        if len(sequence.shape) == 3 and sequence.shape[0] == 1:
+            # Already in shape (1, time_steps, features)
+            reshaped_sequence = sequence
+        elif len(sequence.shape) == 2:
+            # Shape is (time_steps, features), need to add batch dimension
+            reshaped_sequence = np.expand_dims(sequence, axis=0)  # Makes (1, time_steps, features)
+        else:
+            raise ValueError(f"Unexpected sequence shape: {sequence.shape}. Expected (time_steps, features) or (1, time_steps, features)")
+        
         future_predictions = []
+        current_sequence = reshaped_sequence.copy()
         
         # Predict one day at a time
         for _ in range(days_ahead):
             # Get prediction for next day
-            next_pred = self.model.predict(sequence.reshape(1, *sequence.shape))
+            next_pred = self.model.predict(current_sequence)
             future_predictions.append(next_pred[0])
             
-            # Update sequence for next prediction
-            sequence = np.roll(sequence, -1, axis=0)
-            sequence[-1] = next_pred
+            # Update sequence for next prediction - shift the time steps and add new prediction
+            # Keeping the batch dimension (1) intact
+            if len(current_sequence.shape) == 3:
+                # Roll along time steps axis (axis=1)
+                new_sequence = np.roll(current_sequence[0], -1, axis=0)
+                # Set the last time step to be the new prediction
+                new_sequence[-1] = next_pred
+                # Add batch dimension back
+                current_sequence = np.expand_dims(new_sequence, axis=0)
+            else:
+                raise ValueError(f"Unexpected sequence shape after prediction: {current_sequence.shape}")
         
         # Convert predictions to original scale
         if self.target_scaler:

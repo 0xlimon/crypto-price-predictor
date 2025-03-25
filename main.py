@@ -274,13 +274,16 @@ def make_predictions(model, data, processed_data, args):
         # Get dates for test set
         test_dates = data.index[-len(y_true):]
         
+        # Use model name if available, otherwise use "LSTM" as default
+        model_name = args.model.upper() if hasattr(args, 'model') else "LSTM"
+        
         # Plot predictions vs actual
         plot_predictions(y_true, y_pred, dates=test_dates, 
-                        model_name=args.model.upper(), 
+                        model_name=model_name, 
                         save_path=os.path.join(args.output_dir, 'predictions_plot.png'))
         
         # Plot error distribution
-        plot_error_distribution(y_true, y_pred, model_name=args.model.upper(),
+        plot_error_distribution(y_true, y_pred, model_name=model_name,
                                save_path=os.path.join(args.output_dir, 'error_distribution.png'))
     
     # Predict future if days_ahead is specified

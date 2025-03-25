@@ -4,220 +4,204 @@ A comprehensive machine learning system for predicting cryptocurrency prices usi
 
 ## Features
 
-- **Multiple timeframe support**: Daily, hourly, 30-minute, and other intervals
-- **Advanced prediction models**:
-  - LSTM (Long Short-Term Memory) neural networks
-  - Ensemble methods (Random Forest, Gradient Boosting, XGBoost)
-- **Technical indicators**: Over 60 engineered features from price data
-- **Comprehensive evaluation**: Multiple metrics and visualization tools
-- **Flexible command-line interface**: Individual commands for each step or full pipeline execution
+- **Multiple Timeframe Support**: Daily, hourly, 30-minute, and custom intervals
+- **Advanced Models**: LSTM neural networks and ensemble methods
+- **Extensive Feature Engineering**: Technical indicators, trend analysis, and volatility metrics
+- **Comprehensive Evaluation**: Multiple performance metrics and visualization tools
+- **Flexible Pipeline**: End-to-end workflow or individual components
 
 ## Project Structure
 
 ```
 crypto_price_predictor/
-│
-├── data/                      # Data handling components
-│   ├── data_loader.py         # Loading cryptocurrency data from sources
-│   └── data_processor.py      # Preprocessing and preparing data for models
-│
-├── features/                  # Feature engineering
-│   └── feature_engineering.py # Creating technical indicators and features
-│
-├── models/                    # Model implementations
-│   ├── lstm_model.py          # LSTM neural network for time series
-│   └── ensemble_model.py      # Ensemble methods implementation
-│
-├── evaluation/                # Evaluation components
-│   └── metrics.py             # Metrics calculation and visualization
-│
-├── utils/                     # Utility modules
-│   ├── visualization.py       # Data and results visualization
-│   └── helpers.py             # Helper functions
-│
-└── main.py                    # Main entry point with CLI
+├── data/
+│   ├── data_loader.py        # Handles data acquisition from sources
+│   └── data_processor.py     # Transforms and prepares data for models
+├── features/
+│   └── feature_engineering.py # Creates technical indicators and features
+├── models/
+│   ├── lstm_model.py         # LSTM neural network implementation
+│   └── ensemble_model.py     # Ensemble method implementations
+├── evaluation/
+│   └── metrics.py            # Performance metrics and visualization
+└── utils/
+    ├── helpers.py            # Utility functions
+    └── visualization.py      # Visualization tools
 ```
 
 ## Requirements
 
 - Python 3.8+
-- Dependencies:
-  ```
-  numpy>=1.19.5
-  pandas>=1.3.0
-  scikit-learn>=0.24.2
-  tensorflow>=2.6.0
-  matplotlib>=3.4.3
-  seaborn>=0.11.2
-  yfinance>=0.1.63
-  ta>=0.7.0 (Technical Analysis library)
-  ```
+- TensorFlow 2.x
+- pandas
+- numpy
+- scikit-learn
+- matplotlib
+- yfinance
+- ta (Technical Analysis library)
 
-## Installation
+Install dependencies:
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/0xlimon/crypto-price-predictor.git
-   cd ccrypto-price-predictor
-   ```
-
-2. Install required packages:
-   ```
-   pip install -r requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
 ## Usage
 
-The system provides a command-line interface with multiple commands for different stages of the prediction process.
+The system provides both a complete pipeline and individual components that can be used separately.
 
-### Basic Command Structure
+### Basic Commands
 
+**Data Collection:**
+```bash
+python main.py --ticker BTC-USD --days 180 data --save
 ```
-python main.py [general options] command [command options]
+
+**Feature Engineering:**
+```bash
+python main.py --ticker BTC-USD --days 180 features --groups trend momentum volatility --visualize
 ```
 
-### General Options
-
-- `--ticker`: Cryptocurrency ticker symbol (default: BTC-USD)
-- `--days`: Number of days of historical data (default: 730)
-- `--interval`: Data interval (default: 1d, options: 1d, 1h, 30m, etc.)
-- `--output-dir`: Directory to save results (default: ./results)
-- `--verbose`: Enable verbose output
-- `--log-file`: Path to log file
-
-### Available Commands
-
-1. **data**: Download and process data
-   ```
-   python main.py --ticker BTC-USD --days 730 data --save --visualize
-   ```
-   Options:
-   - `--save`: Save data to CSV
-   - `--visualize`: Create price history and candlestick charts
-
-2. **features**: Engineer features from price data
-   ```
-   python main.py --ticker BTC-USD --days 730 features --groups trend momentum volatility volume --visualize --correlation
-   ```
-   Options:
-   - `--groups`: Feature groups to include
-   - `--visualize`: Create technical indicator charts
-   - `--correlation`: Generate correlation matrix
-
-3. **train**: Train prediction models
-   ```
-   python main.py --ticker BTC-USD --days 730 train --model lstm --epochs 100 --sequence-length 60 --save-model
-   ```
-   Options:
-   - `--model`: Model type (lstm or ensemble)
-   - `--epochs`: Number of training epochs
-   - `--sequence-length`: Sequence length for LSTM
-   - `--save-model`: Save the trained model
-   - `--config`: Path to model configuration file
-
-4. **predict**: Make predictions with a trained model
-   ```
-   python main.py --ticker BTC-USD --days 730 predict --model-path ./results/models/lstm_BTC-USD_YYYYMMDD_HHMMSS.h5 --days-ahead 30 --plot
-   ```
-   Options:
-   - `--model-path`: Path to the saved model (required)
-   - `--days-ahead`: Number of days to forecast
-   - `--plot`: Generate prediction charts
-
-5. **evaluate**: Evaluate model performance
-   ```
-   python main.py --ticker BTC-USD --days 730 evaluate --model-path ./results/models/lstm_BTC-USD_YYYYMMDD_HHMMSS.h5 --comparison
-   ```
-   Options:
-   - `--model-path`: Path to the saved model (required)
-   - `--comparison`: Compare with other models
-
-6. **pipeline**: Run full prediction pipeline
-   ```
-   python main.py --ticker BTC-USD --days 730 pipeline --model lstm --epochs 100 --forecast-days 30 --save-all
-   ```
-   Options:
-   - `--model`: Model type (lstm or ensemble)
-   - `--epochs`: Number of training epochs
-   - `--forecast-days`: Days to forecast ahead
-   - `--save-all`: Save all outputs (data, model, predictions)
-
-## Working with 30-Minute Interval Data
-
-To work with 30-minute interval data, use the `--interval 30m` parameter. This higher frequency data requires different considerations compared to daily data.
-
-### Loading 30-Minute Data
-
+**Model Training:**
+```bash
+python main.py --ticker BTC-USD --days 180 train --model lstm --epochs 100 --sequence-length 60 --save-model
 ```
+
+**Prediction:**
+```bash
+python main.py --ticker BTC-USD --days 180 predict --model-path ./results/models/lstm_BTC-USD_20250324_HHMMSS.h5 --days-ahead 30 --plot
+```
+
+**Evaluation:**
+```bash
+python main.py --ticker BTC-USD --days 180 evaluate --model-path ./results/models/lstm_BTC-USD_20250324_HHMMSS.h5
+```
+
+**Full Pipeline:**
+```bash
+python main.py --ticker BTC-USD --days 180 pipeline --model lstm --forecast-days 30 --save-all
+```
+
+### Working with 30-Minute Interval Data
+
+This system fully supports 30-minute interval data for more granular analysis and prediction. Use the `--interval 30m` parameter with any command.
+
+**Collecting 30-Minute Data:**
+```bash
 python main.py --ticker BTC-USD --interval 30m --days 30 data --save
 ```
 
-Notes:
-- Use fewer days (15-30 recommended) to avoid excessive data volume
-- 30 days of 30-minute data generates approximately 1,440 data points
-
-### Training with 30-Minute Data
-
-```
+**Training with 30-Minute Data:**
+```bash
 python main.py --ticker BTC-USD --interval 30m --days 30 train --model lstm --epochs 50 --sequence-length 48 --save-model
 ```
 
-Recommendations for 30-minute data:
-- `--sequence-length 48`: Uses 24 hours of 30-minute data points as context (48 intervals)
-- `--epochs 50-100`: Sufficient for 30-minute data
-- LSTM models typically perform better than ensemble models for high-frequency data
-
-### Predicting with 30-Minute Models
-
-```
+**Predicting with 30-Minute Data:**
+```bash
 python main.py --ticker BTC-USD --interval 30m --days 30 predict --model-path ./results/models/lstm_BTC-USD_YYYYMMDD_HHMMSS.h5 --days-ahead 2 --plot
 ```
 
-Notes:
-- For 30-minute data, shorter prediction horizons (1-3 days) are recommended
-- `--days-ahead 2` predicts 96 intervals (48 per day)
-
-### Full Pipeline with 30-Minute Data
-
-```
-python main.py --ticker BTC-USD --interval 30m --days 30 pipeline --model lstm --epochs 50 --forecast-days 2 --save-all
+**Full Pipeline with 30-Minute Data:**
+```bash
+python main.py --ticker BTC-USD --interval 30m --days 30 pipeline --model lstm --forecast-days 2 --save-all
 ```
 
-## Understanding the Results
+#### Recommended Parameters for 30-Minute Data
 
-### Model Training Output
+When working with 30-minute interval data, consider these recommended parameters:
 
-The training process outputs several metrics:
-- **Loss**: Mean Squared Error (MSE) between predictions and actual values
-- **MAE**: Mean Absolute Error, shows average prediction deviation
-- **Validation metrics**: Indicate model performance on unseen data
+- **days**: 15-30 days (yields approximately 720-1440 data points)
+- **sequence_length**: 48 (represents 24 hours of 30-minute data)
+- **epochs**: 50-100 (higher frequency data may need more training epochs)
+- **forecast-days**: 1-3 days (short-term forecasts are more accurate for higher frequency data)
 
-Example output:
+#### Notes for 30-Minute Data
+
+1. **Data Volume**: 30-minute data creates 48 data points per day, so even 30 days provides substantial training data.
+2. **Prediction Horizon**: For high-frequency data, shorter prediction horizons (1-3 days) typically yield more accurate results.
+3. **Hardware Requirements**: Training with high-frequency data may require more computational resources and time.
+
+## Command Reference
+
+### Common Parameters
+
+- `--ticker`: Cryptocurrency symbol (e.g., BTC-USD, ETH-USD)
+- `--days`: Number of historical days to use for data
+- `--interval`: Data time interval (1d, 1h, 30m, etc.)
+- `--output-dir`: Directory to save results
+
+### Data Command
+
+```bash
+python main.py --ticker BTC-USD --days 180 data [options]
 ```
-Test metrics: {'loss': 0.0023914, 'mae': 0.03846}
+
+Options:
+- `--save`: Save the downloaded data to a CSV file
+- `--visualize`: Generate price charts
+- `--output-dir PATH`: Specify output directory
+
+### Feature Engineering Command
+
+```bash
+python main.py --ticker BTC-USD --days 180 features [options]
 ```
-This means predictions are on average about 3.8% away from actual values.
 
-### Prediction Output
+Options:
+- `--groups GROUP1 [GROUP2 ...]`: Feature groups to include (trend, momentum, volatility, volume)
+- `--visualize`: Generate feature visualization
+- `--correlation`: Show feature correlation heatmap
+- `--save`: Save engineered features to CSV
 
-Predictions are saved as:
-- CSV file with timestamp and predicted values
-- Visualization charts comparing actual vs. predicted values
-- Error distribution graphs
+### Training Command
 
-### Saved Files
+```bash
+python main.py --ticker BTC-USD --days 180 train [options]
+```
 
-All outputs are saved in the `./results` directory:
-- Raw data: `./results/BTC-USD_data.csv`
-- Trained models: `./results/models/lstm_BTC-USD_YYYYMMDD_HHMMSS.h5`
-- Predictions: `./results/BTC-USD_predictions_YYYYMMDD.csv`
-- Charts: Various PNG files in `./results`
+Options:
+- `--model MODEL`: Model type (lstm or ensemble)
+- `--epochs N`: Number of training epochs
+- `--sequence-length N`: Length of input sequences
+- `--save-model`: Save the trained model
+- `--config PATH`: JSON file with model configuration
+
+### Prediction Command
+
+```bash
+python main.py --ticker BTC-USD --days 180 predict [options]
+```
+
+Options:
+- `--model-path PATH`: Path to the trained model
+- `--days-ahead N`: Number of days to predict
+- `--plot`: Generate prediction chart
+
+### Evaluation Command
+
+```bash
+python main.py --ticker BTC-USD --days 180 evaluate [options]
+```
+
+Options:
+- `--model-path PATH`: Path to the trained model
+- `--comparison`: Compare with benchmark models
+
+### Pipeline Command
+
+```bash
+python main.py --ticker BTC-USD --days 180 pipeline [options]
+```
+
+Options:
+- `--model MODEL`: Model type (lstm or ensemble)
+- `--forecast-days N`: Number of days to predict
+- `--save-all`: Save data, model, and predictions
+- `--config PATH`: JSON file with model configuration
 
 ## Advanced Configuration
 
-### Model Configuration File
-
-You can create a JSON configuration file for fine-tuning model parameters:
+You can provide advanced configuration via JSON files:
 
 ```json
 {
@@ -231,61 +215,53 @@ You can create a JSON configuration file for fine-tuning model parameters:
 }
 ```
 
-Use with:
-```
-python main.py --ticker BTC-USD train --model lstm --config my_config.json
+Example usage:
+```bash
+python main.py --ticker BTC-USD --days 180 train --model lstm --config my_config.json
 ```
 
 ## Troubleshooting
 
-### Common Issues
+### Common Issues with 30-Minute Data
 
-1. **Error with feature engineering for 30-minute data**:
-   - Solution: The code now handles high-frequency data properly, ensuring features are calculated correctly.
+1. **Infinity or NaN values**: 
+   - The system now handles this automatically by sanitizing data after feature engineering.
+   - If you see related errors, try reducing the amount of data or using the daily interval first.
 
-2. **Out of memory errors with large datasets**:
-   - Solution: Reduce the number of days or use a lower frequency interval.
+2. **Model Saving Errors**: 
+   - Ensure you have write permissions to the output directory.
+   - The system now automatically adds the .h5 extension to model files.
 
-3. **Model saving errors**:
-   - Solution: Ensure the model path has a valid extension (.h5).
+3. **CUDA Errors**: 
+   - These are warnings and don't affect functionality. The system will use CPU if GPU is not available.
 
-4. **Poor prediction accuracy**:
-   - Solution: Experiment with different sequence lengths, more training epochs, or different model architectures.
+4. **Shape Errors During Prediction**: 
+   - The latest version properly handles input sequence shapes for predictions.
+   - If problems persist, ensure your model was trained with the same parameters.
 
-## Examples
+## Results and Interpretation
 
-### Example 1: Predict Bitcoin Price with Daily Data
+The model outputs several evaluation metrics:
 
-```
-# Load and visualize data
-python main.py --ticker BTC-USD --days 730 data --save --visualize
+- **MAE (Mean Absolute Error)**: Average absolute difference between predictions and actual values
+- **RMSE (Root Mean Squared Error)**: Root of the average squared differences
+- **Directional Accuracy**: Percentage of correct price movement directions predicted
+- **R²**: Coefficient of determination (how well the model explains the variance)
 
-# Train LSTM model
-python main.py --ticker BTC-USD --days 730 train --model lstm --epochs 100 --sequence-length 60 --save-model
+A typical successful model might show:
+- MAE < 5% of the price
+- Directional Accuracy > 55%
 
-# Make predictions
-python main.py --ticker BTC-USD --days 730 predict --model-path ./results/models/lstm_BTC-USD_YYYYMMDD_HHMMSS.h5 --days-ahead 30 --plot
-```
+## Example Results
 
-### Example 2: Short-term Prediction with 30-Minute Data
-
-```
-# Load 30-minute data
-python main.py --ticker BTC-USD --interval 30m --days 30 data --save
-
-# Train model with 30-minute data
-python main.py --ticker BTC-USD --interval 30m --days 30 train --model lstm --epochs 50 --sequence-length 48 --save-model
-
-# Predict next 2 days (96 intervals of 30 minutes)
-python main.py --ticker BTC-USD --interval 30m --days 30 predict --model-path ./results/models/lstm_BTC-USD_YYYYMMDD_HHMMSS.h5 --days-ahead 2 --plot
-```
-
-### Example 3: Complete Pipeline Run
+Training a model with 30-minute Bitcoin data typically yields results like:
 
 ```
-python main.py --ticker ETH-USD --interval 1h --days 90 pipeline --model lstm --epochs 75 --forecast-days 7 --save-all
+Test metrics: {'loss': 0.0023914019111543894, 'mae': 0.03846069425344467}
 ```
+
+This indicates mean absolute error of around 3.8%, which is quite good for cryptocurrency price prediction.
 
 ## License
 
-MIT
+This project is available under the MIT License.
